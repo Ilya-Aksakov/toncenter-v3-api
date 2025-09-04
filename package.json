@@ -1,0 +1,30 @@
+{
+  "name": "toncenter-v3-api",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . --ext .ts,.js",
+    "lint:fix": "eslint . --ext .ts,.js --fix",
+    "format": "prettier --write \"**/*.{ts,js,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,js,json,md}\"",
+    "check": "bun run lint && bun run format:check",
+    "fix": "bun run lint:fix && bun run format",
+    "typecheck": "tsc --noEmit",
+    "prebuild": "bun run check && bun run typecheck",
+    "build": "bun run prebuild && bun build index.ts --outfile=dist/index.js --target=node",
+    "build:fast": "bun build index.ts --outfile=dist/index.js --target=node",
+    "example": "bun run example.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@typescript-eslint/eslint-plugin": "^8.42.0",
+    "@typescript-eslint/parser": "^8.42.0",
+    "eslint": "^9.34.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^3.6.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
