@@ -2,12 +2,23 @@
 
 TypeScript/JavaScript library for working with [TON Center v3 API](https://toncenter.com/api/v3/). All methods with "blockchain" tag are implemented with full typing.
 
+[![npm version](https://badge.fury.io/js/toncenter-v3-api.svg)](https://badge.fury.io/js/toncenter-v3-api)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## Installation
 
 ```bash
-bun install
-# or
-npm install
+# npm
+npm install toncenter-v3-api
+
+# yarn
+yarn add toncenter-v3-api
+
+# pnpm
+pnpm add toncenter-v3-api
+
+# bun
+bun add toncenter-v3-api
 ```
 
 ## Quick Start
@@ -47,6 +58,16 @@ const blocks = await getBlocks(
   { apiKey: "YOUR_API_KEY", chain: "testnet" }
 );
 ```
+
+## Features
+
+- ✅ **Full TypeScript support** with strict typing
+- ✅ **All blockchain methods** from TON Center v3 API
+- ✅ **Mainnet & Testnet** support
+- ✅ **Modern ESM** and CommonJS compatibility
+- ✅ **Zero dependencies** - lightweight and fast
+- ✅ **Well documented** with examples
+- ✅ **Production ready** with comprehensive testing
 
 ## Available Methods
 
@@ -304,9 +325,22 @@ bun run build
 bun run build:fast
 ```
 
+## Requirements
+
+- Node.js >= 18.0.0
+- TypeScript >= 5.0.0 (peer dependency)
+
 ## License
 
 MIT
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ---
 

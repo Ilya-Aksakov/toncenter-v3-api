@@ -1,7 +1,41 @@
 {
   "name": "toncenter-v3-api",
+  "version": "1.0.0",
+  "description": "TypeScript/JavaScript library for TON Center v3 API with full blockchain methods support",
+  "keywords": [
+    "ton",
+    "blockchain",
+    "toncenter",
+    "api",
+    "typescript",
+    "cryptocurrency",
+    "web3",
+    "ton-blockchain"
+  ],
+  "author": "Ilya Aksakov <lexent.lex@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ilya-Aksakov/toncenter-v3-api.git"
+  },
+  "homepage": "https://github.com/Ilya-Aksakov/toncenter-v3-api#readme",
+  "bugs": {
+    "url": "https://github.com/Ilya-Aksakov/toncenter-v3-api/issues"
+  },
+  "main": "dist/index.js",
   "module": "index.ts",
+  "types": "index.ts",
   "type": "module",
+  "files": [
+    "dist/",
+    "src/",
+    "index.ts",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "lint": "eslint . --ext .ts,.js",
     "lint:fix": "eslint . --ext .ts,.js --fix",
@@ -13,6 +47,7 @@
     "prebuild": "bun run check && bun run typecheck",
     "build": "bun run prebuild && bun build index.ts --outfile=dist/index.js --target=node",
     "build:fast": "bun build index.ts --outfile=dist/index.js --target=node",
+    "prepublishOnly": "bun run build",
     "example": "bun run example.ts"
   },
   "devDependencies": {

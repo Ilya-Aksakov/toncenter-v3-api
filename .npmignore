@@ -1,0 +1,36 @@
+# Development files
+.memory-bank/
+node_modules/
+.git/
+.gitignore
+
+# Build tools
+eslint.config.js
+.prettierrc
+.prettierignore
+tsconfig.json
+
+# Development scripts
+example.ts
+
+# Logs and temporary files
+*.log
+*.tmp
+.DS_Store
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test files (when added)
+test/
+tests/
+__tests__/
+*.test.ts
+*.spec.ts
+
+# Coverage reports (when added)
+coverage/
+.nyc_output/
