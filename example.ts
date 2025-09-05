@@ -1,315 +1,234 @@
-// TON Center v3 API - Usage Examples
-
 import {
-  getTransactions,
   getMasterchainInfo,
+  getTransactions,
   getBlocks,
   getMessages,
   getActions,
   getPendingActions,
-  getPendingTraces,
   getTraces,
+  getPendingTraces,
   getAccountStates,
-  getAddressBook,
-  getMetadata,
   getWalletStates,
-  getAddressInformation,
   getWalletInformation,
   estimateFee,
-  // sendMessage, // commented out for safety in examples
   runGetMethod,
+  type APIOptions,
 } from "./index";
 
 async function main() {
-  const API_KEY = "YOUR_API_KEY_HERE"; // Replace with your actual API key
-
-  console.log("🚀 TON Center v3 API Examples\n");
-
   try {
-    // Example 1: Get masterchain info (mainnet)
-    console.log("📊 Getting masterchain info (mainnet)...");
-    const mainnetInfo = await getMasterchainInfo({ apiKey: API_KEY });
-    console.log("First block:", mainnetInfo.first.seqno);
-    console.log("Last block:", mainnetInfo.last.seqno);
-    console.log("");
+    console.log("🚀 TON Center v3 API Library Example");
+    console.log("====================================");
 
-    // Example 2: Get masterchain info (testnet)
-    console.log("📊 Getting masterchain info (testnet)...");
-    const testnetInfo = await getMasterchainInfo({
-      apiKey: API_KEY,
+    // Basic configuration
+    const options: APIOptions = {
+      // apiKey: "your-api-key-here", // Uncomment to use API key
+      chain: "mainnet", // Default: "mainnet", also supports "testnet"
+    };
+
+    const testnetOptions: APIOptions = {
       chain: "testnet",
-    });
-    console.log("Testnet first block:", testnetInfo.first.seqno);
-    console.log("Testnet last block:", testnetInfo.last.seqno);
+    };
+
+    // 1. Get masterchain info
+    console.log("\n1. Getting masterchain info...");
+    const mainnetInfo = await getMasterchainInfo(options);
+    console.log("First block:", mainnetInfo.first?.seqno || "N/A");
+    console.log("Last block:", mainnetInfo.last?.seqno || "N/A");
     console.log("");
 
-    // Example 3: Get recent transactions
-    console.log("📝 Getting recent transactions...");
+    // Example with testnet
+    console.log("2. Getting testnet masterchain info...");
+    const testnetInfo = await getMasterchainInfo(testnetOptions);
+    console.log("Testnet first block:", testnetInfo.first?.seqno || "N/A");
+    console.log("Testnet last block:", testnetInfo.last?.seqno || "N/A");
+    console.log("");
+
+    // 3. Get recent transactions
+    console.log("3. Getting recent transactions...");
     const transactions = await getTransactions(
       {
         limit: 5,
         sort: "desc",
       },
-      { apiKey: API_KEY }
+      options
     );
-    console.log(`Found ${transactions.transactions.length} transactions`);
+    console.log(`Found ${transactions.transactions?.length || 0} transactions`);
     console.log("");
 
-    // Example 4: Get recent blocks
-    console.log("🔗 Getting recent blocks...");
-    const blocks = await getBlocks(
-      {
-        limit: 3,
-        sort: "desc",
-      },
-      { apiKey: API_KEY }
-    );
-    console.log(`Found ${blocks.blocks.length} blocks`);
+    // 4. Get recent blocks
+    console.log("4. Getting recent blocks...");
+    const blocks = await getBlocks({ limit: 3 }, options);
+    console.log(`Found ${blocks.blocks?.length || 0} blocks`);
     console.log("");
 
-    // Example 5: Get recent messages
-    console.log("📬 Getting recent messages...");
-    const messages = await getMessages(
-      {
-        limit: 3,
-        sort: "desc",
-      },
-      { apiKey: API_KEY }
-    );
-    console.log(`Found ${messages.messages.length} messages`);
+    // 5. Get recent messages
+    console.log("5. Getting recent messages...");
+    const messages = await getMessages({ limit: 3 }, options);
+    console.log(`Found ${messages.messages?.length || 0} messages`);
     console.log("");
 
-    // Example 6: Get recent actions
-    console.log("⚡ Getting recent actions...");
-    const actions = await getActions(
-      {
-        limit: 5,
-        sort: "desc",
-      },
-      { apiKey: API_KEY }
-    );
-    console.log(`Found ${actions.actions.length} actions`);
-    if (actions.actions.length > 0) {
+    // 6. Actions API examples
+    console.log("6. Getting actions...");
+    const actions = await getActions({ limit: 5 }, options);
+    console.log(`Found ${actions.actions?.length || 0} actions`);
+    if (actions.actions && actions.actions.length > 0) {
       console.log(
         "Action types:",
-        actions.actions.map((a) => a.action_type).join(", ")
+        actions.actions.map((a) => a.type).join(", ")
       );
     }
     console.log("");
 
-    // Example 7: Get specific action types
-    console.log("💎 Getting jetton transfer actions...");
+    // Example 7: Get jetton transfers
+    console.log("7. Getting jetton transfers...");
     const jettonActions = await getActions(
       {
+        limit: 5,
         action_type: ["jetton_transfer"],
-        limit: 3,
-        sort: "desc",
       },
-      { apiKey: API_KEY }
+      options
     );
-    console.log(`Found ${jettonActions.actions.length} jetton transfers`);
+    console.log(`Found ${jettonActions.actions?.length || 0} jetton transfers`);
     console.log("");
 
-    // Example 8: Get actions with accounts info
-    console.log("👥 Getting actions with account info...");
+    // Example 8: Get actions with accounts
+    console.log("8. Getting actions with accounts...");
     const actionsWithAccounts = await getActions(
       {
-        limit: 2,
-        include_accounts: true,
-        sort: "desc",
+        limit: 3,
+        account: "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
       },
-      { apiKey: API_KEY }
+      options
     );
     console.log(
-      `Found ${actionsWithAccounts.actions.length} actions with accounts`
+      `Found ${actionsWithAccounts.actions?.length || 0} actions with accounts`
     );
-    if (actionsWithAccounts.address_book) {
-      console.log(
-        `Address book contains ${
-          Object.keys(actionsWithAccounts.address_book).length
-        } addresses`
-      );
-    }
     console.log("");
 
-    // Example 9: Get pending actions
-    console.log("⏳ Getting pending actions...");
-    const pendingActions = await getPendingActions(
-      {
-        supported_action_types: ["jetton_transfer", "ton_transfer"],
-      },
-      { apiKey: API_KEY }
-    );
-    console.log(`Found ${pendingActions.actions.length} pending actions`);
+    // Example 9: Pending actions
+    console.log("9. Getting pending actions...");
+    const pendingActions = await getPendingActions({}, options);
+    console.log(`Found ${pendingActions.actions?.length || 0} pending actions`);
     console.log("");
 
-    // Example 10: Get traces with actions
-    console.log("🔍 Getting traces with actions...");
-    const traces = await getTraces(
-      {
-        limit: 3,
-        include_actions: true,
-        sort: "desc",
-      },
-      { apiKey: API_KEY }
-    );
-    console.log(`Found ${traces.traces.length} traces`);
-    if (traces.traces.length > 0 && traces.traces[0].actions) {
+    // Example 10: Traces
+    console.log("10. Getting traces...");
+    const traces = await getTraces({ limit: 3 }, options);
+    console.log(`Found ${traces.traces?.length || 0} traces`);
+    if (traces.traces && traces.traces.length > 0 && traces.traces[0].actions) {
       console.log(`First trace has ${traces.traces[0].actions.length} actions`);
     }
     console.log("");
 
-    // Example 11: Get pending traces
-    console.log("⏳ Getting pending traces...");
-    const pendingTraces = await getPendingTraces({}, { apiKey: API_KEY });
-    console.log(`Found ${pendingTraces.traces.length} pending traces`);
+    // Example 11: Pending traces
+    console.log("11. Getting pending traces...");
+    const pendingTraces = await getPendingTraces({}, options);
+    console.log(`Found ${pendingTraces.traces?.length || 0} pending traces`);
     console.log("");
 
-    // Example 12: Get traces by time range
-    console.log("⏰ Getting traces from last hour...");
+    // Example 12: Recent traces (last hour)
+    console.log("12. Getting recent traces from last hour...");
+    const oneHourAgo = Math.floor(Date.now() / 1000) - 3600;
     const recentTraces = await getTraces(
-      {
-        start_utime: Math.floor(Date.now() / 1000) - 3600, // last hour
-        limit: 5,
-        sort: "desc",
-      },
-      { apiKey: API_KEY, chain: "testnet" }
+      { limit: 5, start_utime: oneHourAgo },
+      options
     );
-    console.log(`Found ${recentTraces.traces.length} traces from last hour`);
+    console.log(
+      `Found ${recentTraces.traces?.length || 0} traces from last hour`
+    );
     console.log("");
 
-    // Example 13: Get account states
-    console.log("🏦 Getting account states...");
+    // 13. Accounts API examples
+    console.log("13. Checking account states...");
     const accountStates = await getAccountStates(
       {
         address: [
-          "EQD6NMuhaI9M0s57t3hT3TxWyNUvNVqqzqVE6VsFy1gGNxgC", // example addresses
-          "EQBx4lKnP_v5Wp_wd8nKhPPjU2vx4MMHWKuFcUuPnA_F",
+          "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
+          "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c",
         ],
-        include_boc: false,
       },
-      { apiKey: API_KEY }
+      options
     );
-    console.log(`Found ${accountStates.accounts.length} account states`);
+    console.log(`Found ${accountStates.accounts?.length || 0} account states`);
     console.log("");
 
-    // Example 14: Get address book
-    console.log("📖 Getting address book...");
-    const addressBook = await getAddressBook(
+    // Example 14: Wallet information (v2 compatibility)
+    console.log("14. Getting wallet information (v2 API)...");
+    const walletInfo = await getWalletInformation(
       {
-        address: [
-          "EQD6NMuhaI9M0s57t3hT3TxWyNUvNVqqzqVE6VsFy1gGNxgC",
-          "EQBx4lKnP_v5Wp_wd8nKhPPjU2vx4MMHWKuFcUuPnA_F",
-        ],
+        address: "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
       },
-      { apiKey: API_KEY }
+      options
     );
-    console.log(
-      `Address book contains ${Object.keys(addressBook).length} addresses`
-    );
+    console.log(`Account status: ${walletInfo.status || "unknown"}`);
+    console.log(`Balance: ${walletInfo.balance || 0} nanoTON`);
     console.log("");
 
-    // Example 15: Get metadata
-    console.log("🏷️ Getting address metadata...");
-    const metadata = await getMetadata(
-      {
-        address: [
-          "EQD6NMuhaI9M0s57t3hT3TxWyNUvNVqqzqVE6VsFy1gGNxgC",
-          "EQBx4lKnP_v5Wp_wd8nKhPPjU2vx4MMHWKuFcUuPnA_F",
-        ],
-      },
-      { apiKey: API_KEY }
-    );
-    console.log(
-      `Metadata available for ${Object.keys(metadata).length} addresses`
-    );
-    console.log("");
-
-    // Example 16: Get wallet states
-    console.log("👛 Getting wallet states...");
+    // Example 15: Wallet states
+    console.log("15. Getting wallet states...");
     const walletStates = await getWalletStates(
       {
-        address: [
-          "EQD6NMuhaI9M0s57t3hT3TxWyNUvNVqqzqVE6VsFy1gGNxgC",
-          "EQBx4lKnP_v5Wp_wd8nKhPPjU2vx4MMHWKuFcUuPnA_F",
-        ],
+        address: ["EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs"],
       },
-      { apiKey: API_KEY, chain: "testnet" }
+      options
     );
-    console.log(`Found ${walletStates.wallets.length} wallet states`);
-    if (walletStates.wallets.length > 0) {
+    console.log(`Found ${walletStates.wallets?.length || 0} wallet states`);
+    if (walletStates.wallets && walletStates.wallets.length > 0) {
       console.log(
         `First wallet type: ${walletStates.wallets[0].wallet_type || "unknown"}`
       );
     }
     console.log("");
 
-    // Example 17: Get address information (v2 compatibility)
-    console.log("📍 Getting address information (v2)...");
-    const addressInfo = await getAddressInformation(
-      {
-        address: "EQD6NMuhaI9M0s57t3hT3TxWyNUvNVqqzqVE6VsFy1gGNxgC",
-        use_v2: true,
-      },
-      { apiKey: API_KEY }
-    );
-    console.log(`Address status: ${addressInfo.status}`);
-    console.log(`Balance: ${addressInfo.balance} nanoTON`);
-    console.log("");
-
-    // Example 18: Get wallet information (v2 compatibility)
-    console.log("💰 Getting wallet information (v2)...");
-    const walletInfo = await getWalletInformation(
-      {
-        address: "EQD6NMuhaI9M0s57t3hT3TxWyNUvNVqqzqVE6VsFy1gGNxgC",
-        use_v2: true,
-      },
-      { apiKey: API_KEY }
-    );
-    console.log(`Wallet type: ${walletInfo.wallet_type}`);
-    console.log(`Seqno: ${walletInfo.seqno}`);
-    console.log("");
-
-    // Example 19: Estimate fee (v2 compatibility)
-    console.log("💸 Estimating transaction fee...");
+    // Example 16: Fee estimation (v2 compatibility)
+    console.log("16. Estimating fees...");
     const feeEstimate = await estimateFee(
       {
-        address: "EQD6NMuhaI9M0s57t3hT3TxWyNUvNVqqzqVE6VsFy1gGNxgC",
-        body: "te6cckEBAQEADgAAGGhlbGxvIHdvcmxkIRF2Z7E=", // example BOC
+        address: "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
+        body: "te6cckEBAQEADgAAGGhlbGxvIHdvcmxkIQ==",
+        init_code: "",
+        init_data: "",
         ignore_chksig: true,
       },
-      { apiKey: API_KEY }
+      options
     );
-    console.log(`Source fees: ${feeEstimate.source_fees.gas_fee} gas`);
+    console.log(`Source fees: ${feeEstimate.source_fees?.gas_fee || 0} gas`);
     console.log(
-      `Destination fees count: ${feeEstimate.destination_fees.length}`
+      `Destination fees count: ${feeEstimate.destination_fees?.length || 0}`
     );
     console.log("");
 
-    // Example 20: Run get method (v2 compatibility)
-    console.log("🔧 Running get method...");
+    // Example 17: Run get method (v2 compatibility)
+    console.log("17. Running get method...");
     const methodResult = await runGetMethod(
       {
-        address: "EQD6NMuhaI9M0s57t3hT3TxWyNUvNVqqzqVE6VsFy1gGNxgC",
+        address: "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
         method: "seqno",
         stack: [],
       },
-      { apiKey: API_KEY }
+      options
     );
-    console.log(`Method executed, exit code: ${methodResult.exit_code}`);
-    console.log(`Stack size: ${methodResult.stack.length}`);
+    console.log(`Stack size: ${methodResult.stack?.length || 0}`);
     console.log("");
 
+    // Other API methods are available but commented out for brevity
+    // You can uncomment and modify these examples as needed:
+
+    // Example 18: Jettons API
+    // const jettonInfo = await getJettonInfo({ address: "jetton_address" }, options);
+
+    // Example 19: NFTs API
+    // const nftCollections = await getNftCollections({ limit: 5 }, options);
+
+    // Example 20: DNS API
+    // const dnsInfo = await getDnsInfo({ domain: "example.ton" }, options);
+
     // Example 21: Send message (v2 compatibility) - COMMENTED OUT for safety
-    // console.log("📤 Sending message...");
     // const messageResult = await sendMessage(
-    //   {
-    //     boc: "te6cckEBAQEADgAAGGhlbGxvIHdvcmxkIRF2Z7E=" // example BOC - DO NOT USE IN PRODUCTION
-    //   },
-    //   { apiKey: API_KEY, chain: "testnet" }
+    //   { boc: "te6cckEBAQEADgAAGGhlbGxvIHdvcmxkIRF2Z7E=" },
+    //   { apiKey: "your-key", chain: "testnet" }
     // );
-    // console.log(`Message hash: ${messageResult.message_hash}`);
-    // console.log("");
 
     console.log("✅ All examples completed successfully!");
   } catch (error) {
@@ -317,4 +236,5 @@ async function main() {
   }
 }
 
-main().catch(console.error);
+// Run the example
+main();
