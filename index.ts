@@ -12,6 +12,24 @@ export * from "./src/accounts";
 // Export all api-v2 compatibility methods and types
 export * from "./src/api-v2";
 
+// Export all jettons methods and types
+export * from "./src/jettons";
+
+// Export all NFTs methods and types
+export * from "./src/nfts";
+
+// Export all DNS methods and types
+export * from "./src/dns";
+
+// Export all multisig methods and types
+export * from "./src/multisig";
+
+// Export all stats methods and types
+export * from "./src/stats";
+
+// Export all vesting methods and types
+export * from "./src/vesting";
+
 // Export types (excluding APIOptions to avoid conflict)
 export type {
   RequestError,
@@ -79,6 +97,48 @@ export type {
   V2RunGetMethodResult,
   GetAddressInformationParams,
   GetWalletInformationParams,
+  // Jettons types
+  JettonBurn,
+  JettonMaster,
+  JettonTransfer,
+  JettonWallet,
+  JettonBurnsResponse,
+  JettonMastersResponse,
+  JettonTransfersResponse,
+  JettonWalletsResponse,
+  GetJettonBurnsParams,
+  GetJettonMastersParams,
+  GetJettonTransfersParams,
+  GetJettonWalletsParams,
+  // NFTs types
+  NFTCollection,
+  NFTItem,
+  NFTTransfer,
+  NFTCollectionsResponse,
+  NFTItemsResponse,
+  NFTTransfersResponse,
+  GetNFTCollectionsParams,
+  GetNFTItemsParams,
+  GetNFTTransfersParams,
+  // DNS types
+  DNSRecord,
+  DNSRecordsResponse,
+  GetDNSRecordsParams,
+  // Multisig types
+  MultisigOrder,
+  Multisig,
+  MultisigOrderResponse,
+  MultisigResponse,
+  GetMultisigOrdersParams,
+  GetMultisigWalletsParams,
+  // Stats types
+  AccountBalance,
+  TopAccountsByBalanceResponse,
+  GetTopAccountsByBalanceParams,
+  // Vesting types
+  VestingContract,
+  VestingContractsResponse,
+  GetVestingContractsParams,
 } from "./src/types";
 
 // Export constants
@@ -93,60 +153,50 @@ import {
   getTraces,
   getAccountStates,
   getAddressInformation,
-  runGetMethod
-} from './src';
+  runGetMethod,
+  getJettonTransfers,
+  getNFTCollections,
+  getDNSRecords,
+  getMultisigOrders,
+  getTopAccountsByBalance,
+  getVestingContracts,
+} from 'toncenter-v3-api';
 
 async function example() {
   try {
-    // Get masterchain info (mainnet by default)
-    const info = await getMasterchainInfo({ apiKey: 'YOUR_API_KEY' });
-    console.log('Masterchain info:', info);
+    const apiKey = 'YOUR_API_KEY';
 
-    // Get recent transactions from testnet
-    const transactions = await getTransactions(
-      { limit: 10, sort: 'desc' },
-      { apiKey: 'YOUR_API_KEY', chain: 'testnet' }
-    );
-    console.log('Recent transactions:', transactions);
+    // Blockchain API
+    const info = await getMasterchainInfo({ apiKey });
+    const transactions = await getTransactions({ limit: 10 }, { apiKey });
 
-    // Get recent actions
-    const actions = await getActions(
-      { limit: 10, sort: 'desc' },
-      { apiKey: 'YOUR_API_KEY' }
-    );
-    console.log('Recent actions:', actions);
+    // Actions API
+    const actions = await getActions({ limit: 10 }, { apiKey });
+    const traces = await getTraces({ limit: 5, include_actions: true }, { apiKey });
 
-    // Get traces
-    const traces = await getTraces(
-      { limit: 5, include_actions: true },
-      { apiKey: 'YOUR_API_KEY' }
-    );
-    console.log('Traces:', traces);
+    // Accounts API
+    const accounts = await getAccountStates({ address: ['EQD6NM...'] }, { apiKey });
 
-    // Get account states
-    const accountStates = await getAccountStates(
-      { address: ['EQD6NM...', 'EQBx...'] },
-      { apiKey: 'YOUR_API_KEY' }
-    );
-    console.log('Account states:', accountStates);
+    // API v2 Compatibility
+    const addressInfo = await getAddressInformation({ address: 'EQD6NM...' }, { apiKey });
 
-    // Get address information (v2 compatibility)
-    const addressInfo = await getAddressInformation(
-      { address: 'EQD6NM...', use_v2: true },
-      { apiKey: 'YOUR_API_KEY' }
-    );
-    console.log('Address info:', addressInfo);
+    // Jettons API
+    const jettonTransfers = await getJettonTransfers({ limit: 10 }, { apiKey });
 
-    // Run get method
-    const methodResult = await runGetMethod(
-      {
-        address: 'EQD6NM...',
-        method: 'get_wallet_data',
-        stack: []
-      },
-      { apiKey: 'YOUR_API_KEY' }
-    );
-    console.log('Method result:', methodResult);
+    // NFTs API
+    const nftCollections = await getNFTCollections({ limit: 10 }, { apiKey });
+
+    // DNS API
+    const dnsRecords = await getDNSRecords({ wallet: 'EQD6NM...' }, { apiKey });
+
+    // Multisig API
+    const multisigOrders = await getMultisigOrders({ limit: 10 }, { apiKey });
+
+    // Stats API
+    const topAccounts = await getTopAccountsByBalance({ limit: 10 }, { apiKey });
+
+    // Vesting API
+    const vestingContracts = await getVestingContracts({ limit: 10 }, { apiKey });
 
   } catch (error) {
     console.error('API Error:', error);

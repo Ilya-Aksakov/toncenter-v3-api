@@ -1,52 +1,174 @@
-# TON Center v3 API
-
-TypeScript/JavaScript library for working with [TON Center v3 API](https://toncenter.com/api/v3/). All methods with "blockchain" tag are implemented with full typing.
+# TON Center v3 API TypeScript Library
 
 [![npm version](https://badge.fury.io/js/toncenter-v3-api.svg)](https://badge.fury.io/js/toncenter-v3-api)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Installation
+Complete TypeScript/JavaScript library for TON Center v3 API with ALL methods support.
+
+## 🚀 Features
+
+- **🎯 Complete API Coverage**: All 39 TON Center v3 API methods implemented
+- **🪙 Jettons API**: Token burns, masters, transfers, wallets
+- **🎨 NFTs API**: Collections, items, transfers and marketplace data
+- **🌐 DNS API**: .ton and .t.me domain resolution
+- **🔒 Multisig API**: Multi-signature wallets and orders
+- **📊 Stats API**: Blockchain analytics and top accounts
+- **💼 Vesting API**: Token vesting contracts and schedules
+- **⛓️ Blockchain API**: Full blockchain data access
+- **🎭 Actions API**: Transaction actions and traces
+- **🏦 Accounts API**: Account states and wallet information
+- **🔄 Legacy v2 API**: Backward compatibility support
+- **🔒 Type Safety**: Full TypeScript support with strict typing
+- **🌐 Network Support**: Both mainnet and testnet
+- **🗝️ API Key Support**: Secure authentication
+- **📦 Modular**: Import only what you need
+- **🎯 Zero Dependencies**: No external runtime dependencies
+
+## 📦 Installation
 
 ```bash
-# npm
 npm install toncenter-v3-api
-
-# yarn
-yarn add toncenter-v3-api
-
-# pnpm
-pnpm add toncenter-v3-api
-
-# bun
-bun add toncenter-v3-api
 ```
 
-## Quick Start
+## 🎯 Quick Start
 
 ```typescript
 import {
-  getTransactions,
   getMasterchainInfo,
-  getBlocks,
+  getTransactions,
   getActions,
-  getTraces,
   getAccountStates,
-  getAddressInformation,
-  runGetMethod,
+  getJettonTransfers,
+  getNFTCollections,
+  getDNSRecords,
+  getMultisigOrders,
+  getTopAccountsByBalance,
+  getVestingContracts,
 } from "toncenter-v3-api";
 
-// Get masterchain info (mainnet by default)
-const info = await getMasterchainInfo({ apiKey: "YOUR_API_KEY" });
-console.log("Last block:", info.last);
+async function example() {
+  try {
+    const apiKey = "YOUR_API_KEY";
 
-// Get info from testnet
-const testnetInfo = await getMasterchainInfo({
-  apiKey: "YOUR_API_KEY",
-  chain: "testnet",
-});
+    // Get blockchain info
+    const info = await getMasterchainInfo({ apiKey });
 
-// Get latest transactions
-const transactions = await getTransactions(
+    // Get recent transactions
+    const transactions = await getTransactions({ limit: 10 }, { apiKey });
+
+    // Get Jetton transfers
+    const jettonTransfers = await getJettonTransfers(
+      { limit: 10 },
+      { apiKey }
+    );
+
+    // Get NFT collections
+    const nftCollections = await getNFTCollections({ limit: 10 }, { apiKey });
+
+    console.log("Blockchain info:", info);
+  } catch (error) {
+    console.error("API Error:", error);
+  }
+}
+```
+
+## 📚 Available Methods
+
+### 🛠️ Blockchain API
+
+Core blockchain data access methods.
+
+- `getMasterchainInfo()` - Get masterchain information
+- `getTransactions()` - Get transactions with filtering
+- `getMessages()` - Get messages by criteria
+- `getBlocks()` - Get blocks information
+- `getAdjacentTransactions()` - Get adjacent transactions
+- `getTransactionsByMessage()` - Get transactions by message
+- `getPendingTransactions()` - Get pending transactions
+- `getMasterchainBlockShards()` - Get masterchain block shards
+- `getMasterchainBlockShardState()` - Get shard state
+- `getTransactionsByMasterchainBlock()` - Get transactions by block
+
+### 🎭 Actions API
+
+Transaction actions and trace analysis.
+
+- `getActions()` - Get actions by specified filter
+- `getPendingActions()` - Get pending actions
+- `getTraces()` - Get transaction traces with actions
+- `getPendingTraces()` - Get pending traces
+
+### 🏦 Accounts API
+
+Account states and wallet information.
+
+- `getAccountStates()` - Get account states by addresses
+- `getAddressBook()` - Get address book metadata
+- `getMetadata()` - Get account metadata
+- `getWalletStates()` - Get wallet states
+
+### 🔄 API v2 Compatibility
+
+Legacy API v2 compatibility methods.
+
+- `getAddressInformation()` - Get smart contract information (v2 format)
+- `getWalletInformation()` - Get wallet information with version support
+- `estimateFee()` - Estimate transaction fees
+- `sendMessage()` - Send external messages to TON network
+- `runGetMethod()` - Execute smart contract get methods
+
+### 🪙 Jettons API
+
+Jetton tokens ecosystem support.
+
+- `getJettonBurns()` - Get Jetton token burns with filtering
+- `getJettonMasters()` - Get Jetton master contracts
+- `getJettonTransfers()` - Get Jetton token transfers
+- `getJettonWallets()` - Get Jetton wallets by criteria
+
+### 🎨 NFTs API  
+
+Non-fungible tokens and marketplace data.
+
+- `getNFTCollections()` - Get NFT collections
+- `getNFTItems()` - Get NFT items by collection or owner
+- `getNFTTransfers()` - Get NFT transfers and marketplace activity
+
+### 🌐 DNS API
+
+Decentralized naming system support.
+
+- `getDNSRecords()` - Get DNS records for .ton and .t.me domains
+
+### 🔒 Multisig API
+
+Multi-signature wallet management.
+
+- `getMultisigOrders()` - Get multisig orders and proposals
+- `getMultisigWallets()` - Get multisig contracts with associated orders
+
+### 📊 Stats API
+
+Blockchain statistics and analytics.
+
+- `getTopAccountsByBalance()` - Get list of accounts sorted by balance
+
+### 💼 Vesting API
+
+Token vesting and distribution tracking.
+
+- `getVestingContracts()` - Get vesting contracts with schedules and whitelists
+
+## 🪙 Jettons API Examples
+
+### Get Jetton Burns
+
+```typescript
+import { getJettonBurns } from "toncenter-v3-api";
+
+// Get recent Jetton burns
+const jettonBurns = await getJettonBurns(
   {
     limit: 10,
     sort: "desc",
@@ -54,327 +176,255 @@ const transactions = await getTransactions(
   { apiKey: "YOUR_API_KEY" }
 );
 
-// Get blocks with filtering from testnet
-const blocks = await getBlocks(
+// Get burns for specific Jetton
+const specificJettonBurns = await getJettonBurns(
   {
-    limit: 5,
-    start_utime: Math.floor(Date.now() / 1000) - 3600, // last hour
-  },
-  { apiKey: "YOUR_API_KEY", chain: "testnet" }
-);
-
-// Get recent actions
-const actions = await getActions(
-  {
-    limit: 10,
-    sort: "desc",
-  },
-  { apiKey: "YOUR_API_KEY" }
-);
-
-// Get specific action types (jetton transfers)
-const jettonActions = await getActions(
-  {
-    action_type: ["jetton_transfer", "jetton_mint"],
-    limit: 5,
-  },
-  { apiKey: "YOUR_API_KEY" }
-);
-```
-
-## Features
-
-- ✅ **Full TypeScript support** with strict typing
-- ✅ **All blockchain, actions, accounts, and v2 compatibility methods** from TON Center v3 API
-- ✅ **Mainnet & Testnet** support
-- ✅ **Modern ESM** and CommonJS compatibility
-- ✅ **Zero dependencies** - lightweight and fast
-- ✅ **Well documented** with examples
-- ✅ **Production ready** with comprehensive testing
-
-## Available Methods
-
-### Blockchain API
-
-| Method                                | Description                                 |
-| ------------------------------------- | ------------------------------------------- |
-| `getAdjacentTransactions()`           | Get parent/child transactions               |
-| `getBlocks()`                         | Get blocks by filters                       |
-| `getMasterchainBlockShardState()`     | Get masterchain block shard state           |
-| `getMasterchainBlockShards()`         | Get masterchain block shards                |
-| `getMasterchainInfo()`                | Get info about first and last indexed block |
-| `getMessages()`                       | Get messages by filters                     |
-| `getPendingTransactions()`            | Get pending transactions                    |
-| `getTransactions()`                   | Get transactions by filters                 |
-| `getTransactionsByMasterchainBlock()` | Get transactions from masterchain block     |
-| `getTransactionsByMessage()`          | Get transactions by message hash            |
-
-### Actions API
-
-| Method                | Description                                     |
-| --------------------- | ----------------------------------------------- |
-| `getActions()`        | Get actions by filters (transfers, swaps, etc.) |
-| `getPendingActions()` | Get pending actions by filters                  |
-| `getTraces()`         | Get transaction traces by filters               |
-| `getPendingTraces()`  | Get pending transaction traces                  |
-
-### Accounts API
-
-| Method               | Description                              |
-| -------------------- | ---------------------------------------- |
-| `getAccountStates()` | Get account states by addresses          |
-| `getAddressBook()`   | Get address book for specified addresses |
-| `getMetadata()`      | Get metadata for addresses               |
-| `getWalletStates()`  | Get wallet states by addresses           |
-
-## Network Support
-
-The library supports both mainnet and testnet:
-
-```typescript
-// Mainnet (default)
-const mainnetTx = await getTransactions(
-  { limit: 10 },
-  { apiKey: "YOUR_API_KEY" }
-);
-
-// Testnet
-const testnetTx = await getTransactions(
-  { limit: 10 },
-  { apiKey: "YOUR_API_KEY", chain: "testnet" }
-);
-```
-
-## Usage Examples
-
-### Getting Transactions
-
-```typescript
-import { getTransactions } from "toncenter-v3-api";
-
-// Get transactions for specific address
-const accountTransactions = await getTransactions(
-  {
-    account: ["EQD6NM..."], // array of addresses
-    limit: 50,
-    sort: "desc",
-  },
-  { apiKey: "YOUR_API_KEY" }
-);
-
-// Get transactions in time range from testnet
-const timeRangeTransactions = await getTransactions(
-  {
-    start_utime: 1640995200, // January 1, 2022
-    end_utime: 1672531200, // January 1, 2023
-    limit: 100,
-  },
-  { apiKey: "YOUR_API_KEY", chain: "testnet" }
-);
-```
-
-### Working with Messages
-
-```typescript
-import { getMessages, getTransactionsByMessage } from "toncenter-v3-api";
-
-// Get messages between addresses
-const messages = await getMessages(
-  {
-    source: "EQD6NM...",
-    destination: "EQBx...",
-    limit: 20,
-  },
-  { apiKey: "YOUR_API_KEY" }
-);
-
-// Find transactions by message hash in testnet
-const transactionsByMsg = await getTransactionsByMessage(
-  {
-    msg_hash: "abc123...",
-    direction: "in",
-  },
-  { apiKey: "YOUR_API_KEY", chain: "testnet" }
-);
-```
-
-### Block Analysis
-
-```typescript
-import { getBlocks, getMasterchainBlockShards } from "toncenter-v3-api";
-
-// Get latest blocks
-const recentBlocks = await getBlocks(
-  {
-    limit: 10,
-    sort: "desc",
-  },
-  { apiKey: "YOUR_API_KEY" }
-);
-
-// Get shards for specific masterchain block
-const shards = await getMasterchainBlockShards(
-  {
-    seqno: 12345678,
-    limit: 50,
-  },
-  { apiKey: "YOUR_API_KEY" }
-);
-```
-
-### Working with Actions
-
-```typescript
-import {
-  getActions,
-  getPendingActions,
-  getTraces,
-  getPendingTraces,
-} from "toncenter-v3-api";
-
-// Get recent actions of any type
-const allActions = await getActions(
-  {
-    limit: 20,
-    sort: "desc",
-  },
-  { apiKey: "YOUR_API_KEY" }
-);
-
-// Get specific action types
-const defiActions = await getActions(
-  {
-    action_type: [
-      "jetton_swap",
-      "dex_deposit_liquidity",
-      "dex_withdraw_liquidity",
-    ],
-    limit: 10,
-  },
-  { apiKey: "YOUR_API_KEY" }
-);
-
-// Get actions for specific account
-const accountActions = await getActions(
-  {
-    account: "EQD6NM...",
-    limit: 50,
-    include_accounts: true, // Include address book
-  },
-  { apiKey: "YOUR_API_KEY" }
-);
-
-// Get actions in time range
-const timeRangeActions = await getActions(
-  {
+    jetton_master: "EQD...", // Jetton master address
     start_utime: Math.floor(Date.now() / 1000) - 86400, // last 24 hours
-    action_type: ["ton_transfer", "jetton_transfer"],
-    limit: 100,
-  },
-  { apiKey: "YOUR_API_KEY", chain: "testnet" }
-);
-
-// Get pending actions
-const pendingActions = await getPendingActions(
-  {
-    account: "EQD6NM...",
-    supported_action_types: ["jetton_transfer", "ton_transfer"],
   },
   { apiKey: "YOUR_API_KEY" }
-);
-
-// Get transaction traces with actions
-const traces = await getTraces(
-  {
-    limit: 10,
-    include_actions: true, // Include actions in traces
-    start_utime: Math.floor(Date.now() / 1000) - 3600, // last hour
-  },
-  { apiKey: "YOUR_API_KEY" }
-);
-
-// Get pending traces
-const pendingTraces = await getPendingTraces(
-  {
-    account: "EQD6NM...",
-  },
-  { apiKey: "YOUR_API_KEY" }
-);
-
-// Get account states
-const accountStates = await getAccountStates(
-  {
-    address: ["EQD6NM...", "EQBx..."],
-    include_boc: false,
-  },
-  { apiKey: "YOUR_API_KEY" }
-);
-
-// Get wallet states
-const walletStates = await getWalletStates(
-  {
-    address: ["EQD6NM...", "EQBx..."],
-  },
-  { apiKey: "YOUR_API_KEY", chain: "testnet" }
 );
 ```
 
-### Working with Accounts
+### Get Jetton Masters
 
-````typescript
-import {
-  getAccountStates,
-  getAddressBook,
-  getMetadata,
-  getWalletStates,
-} from "toncenter-v3-api";
+```typescript
+import { getJettonMasters } from "toncenter-v3-api";
 
-// Get account states with BOC data
-const fullAccountStates = await getAccountStates(
+// Get all Jetton masters
+const jettonMasters = await getJettonMasters(
+  { limit: 20 },
+  { apiKey: "YOUR_API_KEY" }
+);
+
+// Get Jetton masters by admin
+const adminJettons = await getJettonMasters(
   {
-    address: ["EQD6NM...", "EQBx..."],
-    include_boc: true, // Include code and data BOCs
+    admin_address: ["EQD..."],
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+```
+
+### Get Jetton Transfers
+
+```typescript
+import { getJettonTransfers } from "toncenter-v3-api";
+
+// Get recent Jetton transfers
+const jettonTransfers = await getJettonTransfers(
+  {
+    limit: 50,
+    sort: "desc",
   },
   { apiKey: "YOUR_API_KEY" }
 );
 
-// Get account states without BOC (lighter response)
-const lightAccountStates = await getAccountStates(
+// Get transfers for specific owner
+const ownerTransfers = await getJettonTransfers(
   {
-    address: ["EQD6NM...", "EQBx..."],
-    include_boc: false,
+    owner_address: ["EQD..."],
+    direction: "out", // or "in"
+    limit: 100,
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+```
+
+### Get Jetton Wallets
+
+```typescript
+import { getJettonWallets } from "toncenter-v3-api";
+
+// Get Jetton wallets with non-zero balance
+const jettonWallets = await getJettonWallets(
+  {
+    exclude_zero_balance: true,
+    limit: 50,
   },
   { apiKey: "YOUR_API_KEY" }
 );
 
-// Get address book for human-readable addresses
-const addressBook = await getAddressBook(
+// Get wallets for specific Jetton
+const specificJettonWallets = await getJettonWallets(
   {
-    address: ["EQD6NM...", "EQBx..."],
+    jetton_address: ["EQD..."],
+    owner_address: ["EQA...", "EQB..."],
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+```
+
+## 🎨 NFTs API Examples
+
+### Get NFT Collections
+
+```typescript
+import { getNFTCollections } from "toncenter-v3-api";
+
+// Get all NFT collections
+const nftCollections = await getNFTCollections(
+  { limit: 20 },
+  { apiKey: "YOUR_API_KEY" }
+);
+
+// Get collections by owner
+const ownerCollections = await getNFTCollections(
+  {
+    owner_address: ["EQD..."],
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+```
+
+### Get NFT Items
+
+```typescript
+import { getNFTItems } from "toncenter-v3-api";
+
+// Get NFT items from specific collection
+const collectionItems = await getNFTItems(
+  {
+    collection_address: ["EQD..."],
+    limit: 50,
   },
   { apiKey: "YOUR_API_KEY" }
 );
 
-// Get metadata for addresses (token info, etc.)
-const metadata = await getMetadata(
+// Get NFT items by owner
+const ownerItems = await getNFTItems(
   {
-    address: ["EQD6NM...", "EQBx..."],
+    owner_address: ["EQD..."],
+    limit: 100,
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+```
+
+### Get NFT Transfers
+
+```typescript
+import { getNFTTransfers } from "toncenter-v3-api";
+
+// Get recent NFT transfers
+const nftTransfers = await getNFTTransfers(
+  {
+    limit: 30,
+    sort: "desc",
   },
   { apiKey: "YOUR_API_KEY" }
 );
 
-// Get wallet states for wallet addresses
-const walletStates = await getWalletStates(
+// Get NFT transfers for specific collection
+const collectionTransfers = await getNFTTransfers(
   {
-    address: ["EQD6NM...", "EQBx..."],
+    collection_address: "EQD...",
+    start_utime: Math.floor(Date.now() / 1000) - 86400, // last 24 hours
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+```
+
+## 🌐 DNS API Examples
+
+### Get DNS Records
+
+```typescript
+import { getDNSRecords } from "toncenter-v3-api";
+
+// Get DNS records for wallet
+const dnsRecords = await getDNSRecords(
+  {
+    wallet: "EQD...", // wallet address
   },
   { apiKey: "YOUR_API_KEY" }
 );
 
-// Check if addresses are wallets
-const walletsOnly = walletStates.wallets.filter(
-  (wallet) => wallet.is_wallet
+console.log("DNS domains:", dnsRecords.records);
+```
+
+## 🔒 Multisig API Examples
+
+### Get Multisig Orders
+
+```typescript
+import { getMultisigOrders } from "toncenter-v3-api";
+
+// Get multisig orders
+const multisigOrders = await getMultisigOrders(
+  {
+    limit: 20,
+    parse_actions: true, // Parse order actions
+  },
+  { apiKey: "YOUR_API_KEY" }
 );
+
+// Get orders for specific multisig
+const specificOrders = await getMultisigOrders(
+  {
+    multisig_address: ["EQD..."],
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+```
+
+### Get Multisig Wallets
+
+```typescript
+import { getMultisigWallets } from "toncenter-v3-api";
+
+// Get multisig wallets with orders
+const multisigWallets = await getMultisigWallets(
+  {
+    include_orders: true,
+    limit: 10,
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+```
+
+## 📊 Stats API Examples
+
+### Get Top Accounts by Balance
+
+```typescript
+import { getTopAccountsByBalance } from "toncenter-v3-api";
+
+// Get top 100 richest accounts
+const topAccounts = await getTopAccountsByBalance(
+  {
+    limit: 100,
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+
+console.log("Richest accounts:", topAccounts);
+```
+
+## 💼 Vesting API Examples
+
+### Get Vesting Contracts
+
+```typescript
+import { getVestingContracts } from "toncenter-v3-api";
+
+// Get all vesting contracts
+const vestingContracts = await getVestingContracts(
+  {
+    limit: 20,
+    check_whitelist: true,
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+
+// Get vesting for specific wallet
+const walletVesting = await getVestingContracts(
+  {
+    wallet_address: ["EQD..."],
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+```
 
 ## Data Types
 
@@ -406,7 +456,7 @@ import type {
   V2RunGetMethodResult,
   APIOptions,
 } from "toncenter-v3-api";
-````
+```
 
 ### Main Interfaces
 

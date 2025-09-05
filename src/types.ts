@@ -567,3 +567,336 @@ export interface GetWalletInformationParams {
   address: string;
   use_v2?: boolean;
 }
+
+// Jettons API Types
+export interface JettonBurn {
+  amount: string;
+  custom_payload?: string;
+  jetton_master: string;
+  jetton_wallet: string;
+  owner: string;
+  query_id?: string;
+  response_destination?: string;
+  trace_id?: string;
+  transaction_aborted: boolean;
+  transaction_hash: string;
+  transaction_lt: string;
+  transaction_now: number;
+}
+
+export interface JettonMaster {
+  address: string;
+  admin_address?: string;
+  code_hash: string;
+  data_hash: string;
+  jetton_content?: { [key: string]: unknown };
+  jetton_wallet_code_hash: string;
+  last_transaction_lt: string;
+  mintable: boolean;
+  total_supply: string;
+}
+
+export interface JettonTransfer {
+  amount: string;
+  custom_payload?: string;
+  destination: string;
+  forward_payload?: string;
+  forward_ton_amount?: string;
+  jetton_master: string;
+  query_id?: string;
+  response_destination?: string;
+  source: string;
+  source_wallet: string;
+  trace_id?: string;
+  transaction_aborted: boolean;
+  transaction_hash: string;
+  transaction_lt: string;
+  transaction_now: number;
+}
+
+export interface JettonWallet {
+  address: string;
+  balance: string;
+  code_hash: string;
+  data_hash: string;
+  jetton: string;
+  last_transaction_lt: string;
+  owner: string;
+}
+
+export interface JettonBurnsResponse {
+  jetton_burns: JettonBurn[];
+  address_book?: AddressBook;
+  metadata?: Metadata;
+}
+
+export interface JettonMastersResponse {
+  jetton_masters: JettonMaster[];
+  address_book?: AddressBook;
+  metadata?: Metadata;
+}
+
+export interface JettonTransfersResponse {
+  jetton_transfers: JettonTransfer[];
+  address_book?: AddressBook;
+  metadata?: Metadata;
+}
+
+export interface JettonWalletsResponse {
+  jetton_wallets: JettonWallet[];
+  address_book?: AddressBook;
+  metadata?: Metadata;
+}
+
+// NFTs API Types
+export interface NFTCollection {
+  address: string;
+  code_hash: string;
+  collection_content?: { [key: string]: unknown };
+  data_hash: string;
+  last_transaction_lt: string;
+  next_item_index?: string;
+  owner_address?: string;
+}
+
+export interface NFTItem {
+  address: string;
+  auction_contract_address?: string;
+  code_hash: string;
+  collection_address?: string;
+  content?: { [key: string]: unknown };
+  data_hash: string;
+  index?: string;
+  init: boolean;
+  last_transaction_lt: string;
+  on_sale: boolean;
+  owner_address?: string;
+  real_owner?: string;
+  sale_contract_address?: string;
+}
+
+export interface NFTTransfer {
+  custom_payload?: string;
+  forward_amount?: string;
+  forward_payload?: string;
+  new_owner: string;
+  nft_address: string;
+  nft_collection?: string;
+  old_owner: string;
+  query_id?: string;
+  response_destination?: string;
+  trace_id?: string;
+  transaction_aborted: boolean;
+  transaction_hash: string;
+  transaction_lt: string;
+  transaction_now: number;
+}
+
+export interface NFTCollectionsResponse {
+  nft_collections: NFTCollection[];
+  address_book?: AddressBook;
+  metadata?: Metadata;
+}
+
+export interface NFTItemsResponse {
+  nft_items: NFTItem[];
+  address_book?: AddressBook;
+  metadata?: Metadata;
+}
+
+export interface NFTTransfersResponse {
+  nft_transfers: NFTTransfer[];
+  address_book?: AddressBook;
+  metadata?: Metadata;
+}
+
+// DNS API Types
+export interface DNSRecord {
+  dns_next_resolver?: string;
+  dns_site_adnl?: string;
+  dns_storage_bag_id?: string;
+  dns_wallet?: string;
+  domain: string;
+  nft_item_address?: string;
+  nft_item_owner?: string;
+}
+
+export interface DNSRecordsResponse {
+  records: DNSRecord[];
+  address_book?: AddressBook;
+}
+
+// Multisig API Types
+export interface MultisigOrder {
+  address: string;
+  approvals_mask: string;
+  approvals_num: number;
+  code_hash: string;
+  data_hash: string;
+  expiration_date?: number;
+  last_transaction_lt: string;
+  multisig_address: string;
+  order_boc?: string;
+  order_seqno: string;
+  sent_for_execution: boolean;
+  signers: string[];
+  threshold: number;
+}
+
+export interface Multisig {
+  address: string;
+  code_hash: string;
+  data_hash: string;
+  last_transaction_lt: string;
+  next_order_seqno?: string;
+  orders?: MultisigOrder[];
+  proposers: string[];
+  signers: string[];
+  threshold: number;
+}
+
+export interface MultisigOrderResponse {
+  orders: MultisigOrder[];
+  address_book?: AddressBook;
+}
+
+export interface MultisigResponse {
+  multisigs: Multisig[];
+  address_book?: AddressBook;
+}
+
+// Stats API Types
+export interface AccountBalance {
+  account: string;
+  balance: string;
+}
+
+export type TopAccountsByBalanceResponse = AccountBalance[];
+
+// Vesting API Types
+export interface VestingContract {
+  address: string;
+  cliff_duration: number;
+  owner_address: string;
+  sender_address: string;
+  start_time: number;
+  total_amount: string;
+  total_duration: number;
+  unlock_period: number;
+  whitelist: string[];
+}
+
+export interface VestingContractsResponse {
+  vesting_contracts: VestingContract[];
+  address_book?: AddressBook;
+}
+
+// Parameters interfaces
+export interface GetJettonBurnsParams {
+  address?: string[];
+  jetton_wallet?: string[];
+  jetton_master?: string;
+  start_utime?: number;
+  end_utime?: number;
+  start_lt?: number;
+  end_lt?: number;
+  limit?: number;
+  offset?: number;
+  sort?: "asc" | "desc";
+}
+
+export interface GetJettonMastersParams {
+  address?: string[];
+  admin_address?: string[];
+  limit?: number;
+  offset?: number;
+}
+
+export interface GetJettonTransfersParams {
+  owner_address?: string[];
+  jetton_wallet?: string[];
+  jetton_master?: string;
+  direction?: "in" | "out";
+  start_utime?: number;
+  end_utime?: number;
+  start_lt?: number;
+  end_lt?: number;
+  limit?: number;
+  offset?: number;
+  sort?: "asc" | "desc";
+}
+
+export interface GetJettonWalletsParams {
+  address?: string[];
+  owner_address?: string[];
+  jetton_address?: string[];
+  exclude_zero_balance?: boolean;
+  limit?: number;
+  offset?: number;
+  sort?: "asc" | "desc";
+}
+
+export interface GetNFTCollectionsParams {
+  collection_address?: string[];
+  owner_address?: string[];
+  limit?: number;
+  offset?: number;
+}
+
+export interface GetNFTItemsParams {
+  address?: string[];
+  owner_address?: string[];
+  collection_address?: string[];
+  index?: string[];
+  limit?: number;
+  offset?: number;
+}
+
+export interface GetNFTTransfersParams {
+  owner_address?: string[];
+  item_address?: string[];
+  collection_address?: string;
+  direction?: "in" | "out";
+  start_utime?: number;
+  end_utime?: number;
+  start_lt?: number;
+  end_lt?: number;
+  limit?: number;
+  offset?: number;
+  sort?: "asc" | "desc";
+}
+
+export interface GetDNSRecordsParams {
+  wallet: string;
+}
+
+export interface GetMultisigOrdersParams {
+  address?: string[];
+  multisig_address?: string[];
+  parse_actions?: boolean;
+  limit?: number;
+  offset?: number;
+  sort?: "asc" | "desc";
+}
+
+export interface GetMultisigWalletsParams {
+  address?: string[];
+  wallet_address?: string[];
+  limit?: number;
+  offset?: number;
+  sort?: "asc" | "desc";
+  include_orders?: boolean;
+}
+
+export interface GetTopAccountsByBalanceParams {
+  limit?: number;
+  offset?: number;
+}
+
+export interface GetVestingContractsParams {
+  contract_address?: string[];
+  wallet_address?: string[];
+  check_whitelist?: boolean;
+  limit?: number;
+  offset?: number;
+}
