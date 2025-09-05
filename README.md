@@ -28,6 +28,8 @@ import {
   getTransactions,
   getMasterchainInfo,
   getBlocks,
+  getActions,
+  getTraces,
 } from "toncenter-v3-api";
 
 // Get masterchain info (mainnet by default)
@@ -57,12 +59,30 @@ const blocks = await getBlocks(
   },
   { apiKey: "YOUR_API_KEY", chain: "testnet" }
 );
+
+// Get recent actions
+const actions = await getActions(
+  {
+    limit: 10,
+    sort: "desc",
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+
+// Get specific action types (jetton transfers)
+const jettonActions = await getActions(
+  {
+    action_type: ["jetton_transfer", "jetton_mint"],
+    limit: 5,
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
 ```
 
 ## Features
 
 - ✅ **Full TypeScript support** with strict typing
-- ✅ **All blockchain methods** from TON Center v3 API
+- ✅ **All blockchain and actions methods** from TON Center v3 API
 - ✅ **Mainnet & Testnet** support
 - ✅ **Modern ESM** and CommonJS compatibility
 - ✅ **Zero dependencies** - lightweight and fast
@@ -85,6 +105,15 @@ const blocks = await getBlocks(
 | `getTransactions()`                   | Get transactions by filters                 |
 | `getTransactionsByMasterchainBlock()` | Get transactions from masterchain block     |
 | `getTransactionsByMessage()`          | Get transactions by message hash            |
+
+### Actions API
+
+| Method                | Description                                     |
+| --------------------- | ----------------------------------------------- |
+| `getActions()`        | Get actions by filters (transfers, swaps, etc.) |
+| `getPendingActions()` | Get pending actions by filters                  |
+| `getTraces()`         | Get transaction traces by filters               |
+| `getPendingTraces()`  | Get pending transaction traces                  |
 
 ## Network Support
 
@@ -181,6 +210,86 @@ const shards = await getMasterchainBlockShards(
 );
 ```
 
+### Working with Actions
+
+```typescript
+import {
+  getActions,
+  getPendingActions,
+  getTraces,
+  getPendingTraces,
+} from "toncenter-v3-api";
+
+// Get recent actions of any type
+const allActions = await getActions(
+  {
+    limit: 20,
+    sort: "desc",
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+
+// Get specific action types
+const defiActions = await getActions(
+  {
+    action_type: [
+      "jetton_swap",
+      "dex_deposit_liquidity",
+      "dex_withdraw_liquidity",
+    ],
+    limit: 10,
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+
+// Get actions for specific account
+const accountActions = await getActions(
+  {
+    account: "EQD6NM...",
+    limit: 50,
+    include_accounts: true, // Include address book
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+
+// Get actions in time range
+const timeRangeActions = await getActions(
+  {
+    start_utime: Math.floor(Date.now() / 1000) - 86400, // last 24 hours
+    action_type: ["ton_transfer", "jetton_transfer"],
+    limit: 100,
+  },
+  { apiKey: "YOUR_API_KEY", chain: "testnet" }
+);
+
+// Get pending actions
+const pendingActions = await getPendingActions(
+  {
+    account: "EQD6NM...",
+    supported_action_types: ["jetton_transfer", "ton_transfer"],
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+
+// Get transaction traces with actions
+const traces = await getTraces(
+  {
+    limit: 10,
+    include_actions: true, // Include actions in traces
+    start_utime: Math.floor(Date.now() / 1000) - 3600, // last hour
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+
+// Get pending traces
+const pendingTraces = await getPendingTraces(
+  {
+    account: "EQD6NM...",
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+```
+
 ## Data Types
 
 The library is fully typed. Main types:
@@ -190,8 +299,16 @@ import type {
   Transaction,
   Message,
   Block,
+  Action,
+  ActionType,
+  Trace,
+  TraceMeta,
   GetTransactionsParams,
+  GetActionsParams,
+  GetTracesParams,
   TransactionsResponse,
+  ActionsResponse,
+  TracesResponse,
   APIOptions,
 } from "toncenter-v3-api";
 ```
@@ -201,6 +318,8 @@ import type {
 - `Transaction` - transaction data
 - `Message` - message data
 - `Block` - block data
+- `Action` - action data (transfers, swaps, etc.)
+- `Trace` - transaction trace data
 - `AccountState` - account state
 - `TransactionDescr` - transaction description
 - `APIOptions` - API options (key and network)
@@ -210,7 +329,29 @@ import type {
 - `GetTransactionsParams` - parameters for getTransactions()
 - `GetMessagesParams` - parameters for getMessages()
 - `GetBlocksParams` - parameters for getBlocks()
+- `GetActionsParams` - parameters for getActions()
+- `GetTracesParams` - parameters for getTraces()
+- `GetPendingActionsParams` - parameters for getPendingActions()
+- `GetPendingTracesParams` - parameters for getPendingTraces()
 - And others...
+
+### Action Types
+
+The library supports all TON action types:
+
+- `ton_transfer` - TON transfers
+- `jetton_transfer` - Jetton transfers
+- `jetton_mint` - Jetton minting
+- `jetton_burn` - Jetton burning
+- `jetton_swap` - Token swaps
+- `nft_mint` - NFT minting
+- `contract_deploy` - Smart contract deployment
+- `call_contract` - Smart contract calls
+- `dex_deposit_liquidity` - DEX liquidity deposits
+- `dex_withdraw_liquidity` - DEX liquidity withdrawals
+- `stake_deposit` - Staking deposits
+- `stake_withdrawal` - Staking withdrawals
+- And more...
 
 ### APIOptions Interface
 

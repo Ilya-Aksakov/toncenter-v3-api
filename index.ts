@@ -3,6 +3,9 @@
 // Export all blockchain methods and types
 export * from "./src/blockchain";
 
+// Export all actions methods and types
+export * from "./src/actions";
+
 // Export types (excluding APIOptions to avoid conflict)
 export type {
   RequestError,
@@ -36,6 +39,18 @@ export type {
   GetMasterchainBlockShardsParams,
   GetMasterchainBlockShardStateParams,
   GetTransactionsByMasterchainBlockParams,
+  // Actions types
+  Action,
+  ActionType,
+  GetActionsParams,
+  ActionsResponse,
+  GetPendingActionsParams,
+  GetPendingTracesParams,
+  GetTracesParams,
+  Trace,
+  TraceMeta,
+  TraceNode,
+  TracesResponse,
 } from "./src/types";
 
 // Export constants
@@ -43,7 +58,7 @@ export * from "./src/const";
 
 // Example usage (commented out for library usage)
 /*
-import { getTransactions, getMasterchainInfo } from './src/blockchain';
+import { getTransactions, getMasterchainInfo, getActions, getTraces } from './src';
 
 async function example() {
   try {
@@ -57,6 +72,20 @@ async function example() {
       { apiKey: 'YOUR_API_KEY', chain: 'testnet' }
     );
     console.log('Recent transactions:', transactions);
+
+    // Get recent actions
+    const actions = await getActions(
+      { limit: 10, sort: 'desc' },
+      { apiKey: 'YOUR_API_KEY' }
+    );
+    console.log('Recent actions:', actions);
+
+    // Get traces
+    const traces = await getTraces(
+      { limit: 5, include_actions: true },
+      { apiKey: 'YOUR_API_KEY' }
+    );
+    console.log('Traces:', traces);
 
   } catch (error) {
     console.error('API Error:', error);

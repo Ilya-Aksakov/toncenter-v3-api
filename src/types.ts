@@ -295,3 +295,135 @@ export interface GetTransactionsByMasterchainBlockParams {
   offset?: number;
   sort?: "asc" | "desc";
 }
+
+// Actions API Types
+export type ActionType =
+  | "call_contract"
+  | "contract_deploy"
+  | "ton_transfer"
+  | "auction_bid"
+  | "change_dns"
+  | "dex_deposit_liquidity"
+  | "dex_withdraw_liquidity"
+  | "delete_dns"
+  | "renew_dns"
+  | "election_deposit"
+  | "election_recover"
+  | "jetton_burn"
+  | "jetton_swap"
+  | "jetton_transfer"
+  | "jetton_mint"
+  | "nft_mint"
+  | "tick_tock"
+  | "stake_deposit"
+  | "stake_withdrawal"
+  | "stake_withdrawal_request"
+  | "subscribe"
+  | "unsubscribe";
+
+export interface Action {
+  action_id: string;
+  trace_id: string;
+  action_type: ActionType;
+  success: boolean;
+  mc_block_seqno: number;
+  trace_end_utime: number;
+  trace_end_lt: string;
+  // Additional action-specific fields would go here based on action type
+  [key: string]: unknown;
+}
+
+export interface GetActionsParams {
+  account?: string;
+  tx_hash?: string[];
+  msg_hash?: string[];
+  action_id?: string[];
+  trace_id?: string[];
+  mc_seqno?: number;
+  start_utime?: number;
+  end_utime?: number;
+  start_lt?: number;
+  end_lt?: number;
+  action_type?: ActionType[];
+  exclude_action_type?: ActionType[];
+  supported_action_types?: string[];
+  include_accounts?: boolean;
+  limit?: number;
+  offset?: number;
+  sort?: "asc" | "desc";
+}
+
+export interface ActionsResponse {
+  actions: Action[];
+  address_book?: AddressBook;
+}
+
+// Trace-related types
+export interface TraceMeta {
+  classification_state?: string;
+  messages?: number;
+  pending_messages?: number;
+  trace_state?: string;
+  transactions?: number;
+}
+
+export interface TraceNode {
+  children?: TraceNode[];
+  in_msg?: Message;
+  in_msg_hash?: string;
+  transaction?: Transaction;
+  tx_hash?: string;
+}
+
+export interface Trace {
+  actions?: Action[];
+  end_lt?: string;
+  end_utime?: number;
+  external_hash?: string;
+  is_incomplete?: boolean;
+  mc_seqno_end?: string;
+  mc_seqno_start?: string;
+  start_lt?: string;
+  start_utime?: number;
+  trace?: TraceNode;
+  trace_id?: string;
+  trace_info?: TraceMeta;
+  transactions?: { [key: string]: Transaction };
+  transactions_order?: string[];
+  warning?: string;
+}
+
+export interface TracesResponse {
+  traces: Trace[];
+  address_book?: AddressBook;
+  metadata?: Metadata;
+}
+
+// Parameters for actions methods
+export interface GetPendingActionsParams {
+  account?: string;
+  ext_msg_hash?: string[];
+  supported_action_types?: string[];
+}
+
+export interface GetPendingTracesParams {
+  account?: string;
+  ext_msg_hash?: string[];
+}
+
+export interface GetTracesParams {
+  account?: string;
+  trace_id?: string[];
+  tx_hash?: string[];
+  msg_hash?: string[];
+  mc_seqno?: number;
+  start_utime?: number;
+  end_utime?: number;
+  start_lt?: number;
+  end_lt?: number;
+  include_actions?: boolean;
+  supported_action_types?: string[];
+  limit?: number;
+  offset?: number;
+  sort?: "asc" | "desc";
+}
