@@ -489,3 +489,81 @@ export interface GetMetadataParams {
 export interface GetWalletStatesParams {
   address: string[];
 }
+
+// API/v2 Types - Legacy compatibility methods
+export interface V2AddressInformation {
+  balance: string;
+  code: string;
+  data: string;
+  frozen_hash: string;
+  last_transaction_hash: string;
+  last_transaction_lt: string;
+  status: string;
+}
+
+export interface V2WalletInformation {
+  balance: string;
+  last_transaction_hash: string;
+  last_transaction_lt: string;
+  seqno: number;
+  status: string;
+  wallet_id: number;
+  wallet_type: string;
+}
+
+export interface V2EstimateFeeRequest {
+  address: string;
+  body: string;
+  ignore_chksig?: boolean;
+  init_code?: string;
+  init_data?: string;
+}
+
+export interface V2EstimatedFee {
+  fwd_fee: number;
+  gas_fee: number;
+  in_fwd_fee: number;
+  storage_fee: number;
+}
+
+export interface V2EstimateFeeResult {
+  destination_fees: V2EstimatedFee[];
+  source_fees: V2EstimatedFee;
+}
+
+export interface V2SendMessageRequest {
+  boc: string;
+}
+
+export interface V2SendMessageResult {
+  message_hash: string;
+  message_hash_norm: string;
+}
+
+export interface V2StackEntity {
+  type: string;
+  value: unknown;
+}
+
+export interface V2RunGetMethodRequest {
+  address: string;
+  method: string;
+  stack?: V2StackEntity[];
+}
+
+export interface V2RunGetMethodResult {
+  gas_used?: number;
+  stack: V2StackEntity[];
+  exit_code?: number;
+}
+
+// Parameters for api/v2 methods
+export interface GetAddressInformationParams {
+  address: string;
+  use_v2?: boolean;
+}
+
+export interface GetWalletInformationParams {
+  address: string;
+  use_v2?: boolean;
+}

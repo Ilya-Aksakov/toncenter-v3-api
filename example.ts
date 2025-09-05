@@ -13,6 +13,11 @@ import {
   getAddressBook,
   getMetadata,
   getWalletStates,
+  getAddressInformation,
+  getWalletInformation,
+  estimateFee,
+  // sendMessage, // commented out for safety in examples
+  runGetMethod,
 } from "./index";
 
 async function main() {
@@ -238,6 +243,73 @@ async function main() {
       );
     }
     console.log("");
+
+    // Example 17: Get address information (v2 compatibility)
+    console.log("📍 Getting address information (v2)...");
+    const addressInfo = await getAddressInformation(
+      {
+        address: "EQD6NMuhaI9M0s57t3hT3TxWyNUvNVqqzqVE6VsFy1gGNxgC",
+        use_v2: true,
+      },
+      { apiKey: API_KEY }
+    );
+    console.log(`Address status: ${addressInfo.status}`);
+    console.log(`Balance: ${addressInfo.balance} nanoTON`);
+    console.log("");
+
+    // Example 18: Get wallet information (v2 compatibility)
+    console.log("💰 Getting wallet information (v2)...");
+    const walletInfo = await getWalletInformation(
+      {
+        address: "EQD6NMuhaI9M0s57t3hT3TxWyNUvNVqqzqVE6VsFy1gGNxgC",
+        use_v2: true,
+      },
+      { apiKey: API_KEY }
+    );
+    console.log(`Wallet type: ${walletInfo.wallet_type}`);
+    console.log(`Seqno: ${walletInfo.seqno}`);
+    console.log("");
+
+    // Example 19: Estimate fee (v2 compatibility)
+    console.log("💸 Estimating transaction fee...");
+    const feeEstimate = await estimateFee(
+      {
+        address: "EQD6NMuhaI9M0s57t3hT3TxWyNUvNVqqzqVE6VsFy1gGNxgC",
+        body: "te6cckEBAQEADgAAGGhlbGxvIHdvcmxkIRF2Z7E=", // example BOC
+        ignore_chksig: true,
+      },
+      { apiKey: API_KEY }
+    );
+    console.log(`Source fees: ${feeEstimate.source_fees.gas_fee} gas`);
+    console.log(
+      `Destination fees count: ${feeEstimate.destination_fees.length}`
+    );
+    console.log("");
+
+    // Example 20: Run get method (v2 compatibility)
+    console.log("🔧 Running get method...");
+    const methodResult = await runGetMethod(
+      {
+        address: "EQD6NMuhaI9M0s57t3hT3TxWyNUvNVqqzqVE6VsFy1gGNxgC",
+        method: "seqno",
+        stack: [],
+      },
+      { apiKey: API_KEY }
+    );
+    console.log(`Method executed, exit code: ${methodResult.exit_code}`);
+    console.log(`Stack size: ${methodResult.stack.length}`);
+    console.log("");
+
+    // Example 21: Send message (v2 compatibility) - COMMENTED OUT for safety
+    // console.log("📤 Sending message...");
+    // const messageResult = await sendMessage(
+    //   {
+    //     boc: "te6cckEBAQEADgAAGGhlbGxvIHdvcmxkIRF2Z7E=" // example BOC - DO NOT USE IN PRODUCTION
+    //   },
+    //   { apiKey: API_KEY, chain: "testnet" }
+    // );
+    // console.log(`Message hash: ${messageResult.message_hash}`);
+    // console.log("");
 
     console.log("✅ All examples completed successfully!");
   } catch (error) {

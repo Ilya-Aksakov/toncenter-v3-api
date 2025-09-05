@@ -31,6 +31,8 @@ import {
   getActions,
   getTraces,
   getAccountStates,
+  getAddressInformation,
+  runGetMethod,
 } from "toncenter-v3-api";
 
 // Get masterchain info (mainnet by default)
@@ -83,7 +85,7 @@ const jettonActions = await getActions(
 ## Features
 
 - ✅ **Full TypeScript support** with strict typing
-- ✅ **All blockchain, actions, and accounts methods** from TON Center v3 API
+- ✅ **All blockchain, actions, accounts, and v2 compatibility methods** from TON Center v3 API
 - ✅ **Mainnet & Testnet** support
 - ✅ **Modern ESM** and CommonJS compatibility
 - ✅ **Zero dependencies** - lightweight and fast
@@ -389,6 +391,8 @@ import type {
   TraceMeta,
   AccountStateFull,
   WalletState,
+  V2AddressInformation,
+  V2WalletInformation,
   GetTransactionsParams,
   GetActionsParams,
   GetTracesParams,
@@ -398,6 +402,8 @@ import type {
   TracesResponse,
   AccountStatesResponse,
   WalletStatesResponse,
+  V2EstimateFeeResult,
+  V2RunGetMethodResult,
   APIOptions,
 } from "toncenter-v3-api";
 ````
@@ -412,6 +418,8 @@ import type {
 - `AccountState` - basic account state
 - `AccountStateFull` - full account state with BOC data
 - `WalletState` - wallet-specific state
+- `V2AddressInformation` - v2 address information format
+- `V2WalletInformation` - v2 wallet information format
 - `TransactionDescr` - transaction description
 - `APIOptions` - API options (key and network)
 
@@ -428,6 +436,9 @@ import type {
 - `GetAddressBookParams` - parameters for getAddressBook()
 - `GetMetadataParams` - parameters for getMetadata()
 - `GetWalletStatesParams` - parameters for getWalletStates()
+- `V2EstimateFeeRequest` - parameters for estimateFee()
+- `V2RunGetMethodRequest` - parameters for runGetMethod()
+- `V2SendMessageRequest` - parameters for sendMessage()
 - And others...
 
 ### Action Types

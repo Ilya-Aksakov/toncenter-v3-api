@@ -9,6 +9,9 @@ export * from "./src/actions";
 // Export all accounts methods and types
 export * from "./src/accounts";
 
+// Export all api-v2 compatibility methods and types
+export * from "./src/api-v2";
+
 // Export types (excluding APIOptions to avoid conflict)
 export type {
   RequestError,
@@ -63,6 +66,19 @@ export type {
   GetAddressBookParams,
   GetMetadataParams,
   GetWalletStatesParams,
+  // API/v2 types
+  V2AddressInformation,
+  V2WalletInformation,
+  V2EstimateFeeRequest,
+  V2EstimatedFee,
+  V2EstimateFeeResult,
+  V2SendMessageRequest,
+  V2SendMessageResult,
+  V2StackEntity,
+  V2RunGetMethodRequest,
+  V2RunGetMethodResult,
+  GetAddressInformationParams,
+  GetWalletInformationParams,
 } from "./src/types";
 
 // Export constants
@@ -70,7 +86,15 @@ export * from "./src/const";
 
 // Example usage (commented out for library usage)
 /*
-import { getTransactions, getMasterchainInfo, getActions, getTraces, getAccountStates } from './src';
+import {
+  getTransactions,
+  getMasterchainInfo,
+  getActions,
+  getTraces,
+  getAccountStates,
+  getAddressInformation,
+  runGetMethod
+} from './src';
 
 async function example() {
   try {
@@ -105,6 +129,24 @@ async function example() {
       { apiKey: 'YOUR_API_KEY' }
     );
     console.log('Account states:', accountStates);
+
+    // Get address information (v2 compatibility)
+    const addressInfo = await getAddressInformation(
+      { address: 'EQD6NM...', use_v2: true },
+      { apiKey: 'YOUR_API_KEY' }
+    );
+    console.log('Address info:', addressInfo);
+
+    // Run get method
+    const methodResult = await runGetMethod(
+      {
+        address: 'EQD6NM...',
+        method: 'get_wallet_data',
+        stack: []
+      },
+      { apiKey: 'YOUR_API_KEY' }
+    );
+    console.log('Method result:', methodResult);
 
   } catch (error) {
     console.error('API Error:', error);
