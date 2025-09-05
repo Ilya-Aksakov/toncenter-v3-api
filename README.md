@@ -30,6 +30,7 @@ import {
   getBlocks,
   getActions,
   getTraces,
+  getAccountStates,
 } from "toncenter-v3-api";
 
 // Get masterchain info (mainnet by default)
@@ -82,7 +83,7 @@ const jettonActions = await getActions(
 ## Features
 
 - ✅ **Full TypeScript support** with strict typing
-- ✅ **All blockchain and actions methods** from TON Center v3 API
+- ✅ **All blockchain, actions, and accounts methods** from TON Center v3 API
 - ✅ **Mainnet & Testnet** support
 - ✅ **Modern ESM** and CommonJS compatibility
 - ✅ **Zero dependencies** - lightweight and fast
@@ -114,6 +115,15 @@ const jettonActions = await getActions(
 | `getPendingActions()` | Get pending actions by filters                  |
 | `getTraces()`         | Get transaction traces by filters               |
 | `getPendingTraces()`  | Get pending transaction traces                  |
+
+### Accounts API
+
+| Method               | Description                              |
+| -------------------- | ---------------------------------------- |
+| `getAccountStates()` | Get account states by addresses          |
+| `getAddressBook()`   | Get address book for specified addresses |
+| `getMetadata()`      | Get metadata for addresses               |
+| `getWalletStates()`  | Get wallet states by addresses           |
 
 ## Network Support
 
@@ -288,7 +298,81 @@ const pendingTraces = await getPendingTraces(
   },
   { apiKey: "YOUR_API_KEY" }
 );
+
+// Get account states
+const accountStates = await getAccountStates(
+  {
+    address: ["EQD6NM...", "EQBx..."],
+    include_boc: false,
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+
+// Get wallet states
+const walletStates = await getWalletStates(
+  {
+    address: ["EQD6NM...", "EQBx..."],
+  },
+  { apiKey: "YOUR_API_KEY", chain: "testnet" }
+);
 ```
+
+### Working with Accounts
+
+````typescript
+import {
+  getAccountStates,
+  getAddressBook,
+  getMetadata,
+  getWalletStates,
+} from "toncenter-v3-api";
+
+// Get account states with BOC data
+const fullAccountStates = await getAccountStates(
+  {
+    address: ["EQD6NM...", "EQBx..."],
+    include_boc: true, // Include code and data BOCs
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+
+// Get account states without BOC (lighter response)
+const lightAccountStates = await getAccountStates(
+  {
+    address: ["EQD6NM...", "EQBx..."],
+    include_boc: false,
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+
+// Get address book for human-readable addresses
+const addressBook = await getAddressBook(
+  {
+    address: ["EQD6NM...", "EQBx..."],
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+
+// Get metadata for addresses (token info, etc.)
+const metadata = await getMetadata(
+  {
+    address: ["EQD6NM...", "EQBx..."],
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+
+// Get wallet states for wallet addresses
+const walletStates = await getWalletStates(
+  {
+    address: ["EQD6NM...", "EQBx..."],
+  },
+  { apiKey: "YOUR_API_KEY" }
+);
+
+// Check if addresses are wallets
+const walletsOnly = walletStates.wallets.filter(
+  (wallet) => wallet.is_wallet
+);
 
 ## Data Types
 
@@ -303,15 +387,20 @@ import type {
   ActionType,
   Trace,
   TraceMeta,
+  AccountStateFull,
+  WalletState,
   GetTransactionsParams,
   GetActionsParams,
   GetTracesParams,
+  GetAccountStatesParams,
   TransactionsResponse,
   ActionsResponse,
   TracesResponse,
+  AccountStatesResponse,
+  WalletStatesResponse,
   APIOptions,
 } from "toncenter-v3-api";
-```
+````
 
 ### Main Interfaces
 
@@ -320,7 +409,9 @@ import type {
 - `Block` - block data
 - `Action` - action data (transfers, swaps, etc.)
 - `Trace` - transaction trace data
-- `AccountState` - account state
+- `AccountState` - basic account state
+- `AccountStateFull` - full account state with BOC data
+- `WalletState` - wallet-specific state
 - `TransactionDescr` - transaction description
 - `APIOptions` - API options (key and network)
 
@@ -333,6 +424,10 @@ import type {
 - `GetTracesParams` - parameters for getTraces()
 - `GetPendingActionsParams` - parameters for getPendingActions()
 - `GetPendingTracesParams` - parameters for getPendingTraces()
+- `GetAccountStatesParams` - parameters for getAccountStates()
+- `GetAddressBookParams` - parameters for getAddressBook()
+- `GetMetadataParams` - parameters for getMetadata()
+- `GetWalletStatesParams` - parameters for getWalletStates()
 - And others...
 
 ### Action Types

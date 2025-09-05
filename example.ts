@@ -9,6 +9,10 @@ import {
   getPendingActions,
   getPendingTraces,
   getTraces,
+  getAccountStates,
+  getAddressBook,
+  getMetadata,
+  getWalletStates,
 } from "./index";
 
 async function main() {
@@ -167,6 +171,72 @@ async function main() {
       { apiKey: API_KEY, chain: "testnet" }
     );
     console.log(`Found ${recentTraces.traces.length} traces from last hour`);
+    console.log("");
+
+    // Example 13: Get account states
+    console.log("🏦 Getting account states...");
+    const accountStates = await getAccountStates(
+      {
+        address: [
+          "EQD6NMuhaI9M0s57t3hT3TxWyNUvNVqqzqVE6VsFy1gGNxgC", // example addresses
+          "EQBx4lKnP_v5Wp_wd8nKhPPjU2vx4MMHWKuFcUuPnA_F",
+        ],
+        include_boc: false,
+      },
+      { apiKey: API_KEY }
+    );
+    console.log(`Found ${accountStates.accounts.length} account states`);
+    console.log("");
+
+    // Example 14: Get address book
+    console.log("📖 Getting address book...");
+    const addressBook = await getAddressBook(
+      {
+        address: [
+          "EQD6NMuhaI9M0s57t3hT3TxWyNUvNVqqzqVE6VsFy1gGNxgC",
+          "EQBx4lKnP_v5Wp_wd8nKhPPjU2vx4MMHWKuFcUuPnA_F",
+        ],
+      },
+      { apiKey: API_KEY }
+    );
+    console.log(
+      `Address book contains ${Object.keys(addressBook).length} addresses`
+    );
+    console.log("");
+
+    // Example 15: Get metadata
+    console.log("🏷️ Getting address metadata...");
+    const metadata = await getMetadata(
+      {
+        address: [
+          "EQD6NMuhaI9M0s57t3hT3TxWyNUvNVqqzqVE6VsFy1gGNxgC",
+          "EQBx4lKnP_v5Wp_wd8nKhPPjU2vx4MMHWKuFcUuPnA_F",
+        ],
+      },
+      { apiKey: API_KEY }
+    );
+    console.log(
+      `Metadata available for ${Object.keys(metadata).length} addresses`
+    );
+    console.log("");
+
+    // Example 16: Get wallet states
+    console.log("👛 Getting wallet states...");
+    const walletStates = await getWalletStates(
+      {
+        address: [
+          "EQD6NMuhaI9M0s57t3hT3TxWyNUvNVqqzqVE6VsFy1gGNxgC",
+          "EQBx4lKnP_v5Wp_wd8nKhPPjU2vx4MMHWKuFcUuPnA_F",
+        ],
+      },
+      { apiKey: API_KEY, chain: "testnet" }
+    );
+    console.log(`Found ${walletStates.wallets.length} wallet states`);
+    if (walletStates.wallets.length > 0) {
+      console.log(
+        `First wallet type: ${walletStates.wallets[0].wallet_type || "unknown"}`
+      );
+    }
     console.log("");
 
     console.log("✅ All examples completed successfully!");

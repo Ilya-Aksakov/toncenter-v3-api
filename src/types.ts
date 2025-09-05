@@ -427,3 +427,65 @@ export interface GetTracesParams {
   offset?: number;
   sort?: "asc" | "desc";
 }
+
+// Accounts API Types
+export interface AccountStateFull {
+  account_state_hash?: string;
+  address?: string;
+  balance?: string;
+  code_boc?: string;
+  code_hash?: string;
+  contract_methods?: number[];
+  data_boc?: string;
+  data_hash?: string;
+  extra_currencies?: { [key: string]: string };
+  frozen_hash?: string;
+  last_transaction_hash?: string;
+  last_transaction_lt?: string;
+  status?: string;
+}
+
+export interface AccountStatesResponse {
+  accounts: AccountStateFull[];
+  address_book?: AddressBook;
+  metadata?: Metadata;
+}
+
+export interface WalletState {
+  address?: string;
+  balance?: string;
+  code_hash?: string;
+  extra_currencies?: { [key: string]: string };
+  is_signature_allowed?: boolean;
+  is_wallet?: boolean;
+  last_transaction_hash?: string;
+  last_transaction_lt?: string;
+  seqno?: number;
+  status?: string;
+  wallet_id?: number;
+  wallet_type?: string;
+}
+
+export interface WalletStatesResponse {
+  wallets: WalletState[];
+  address_book?: AddressBook;
+  metadata?: Metadata;
+}
+
+// Parameters for accounts methods
+export interface GetAccountStatesParams {
+  address: string[];
+  include_boc?: boolean;
+}
+
+export interface GetAddressBookParams {
+  address: string[];
+}
+
+export interface GetMetadataParams {
+  address: string[];
+}
+
+export interface GetWalletStatesParams {
+  address: string[];
+}

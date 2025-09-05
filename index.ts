@@ -6,6 +6,9 @@ export * from "./src/blockchain";
 // Export all actions methods and types
 export * from "./src/actions";
 
+// Export all accounts methods and types
+export * from "./src/accounts";
+
 // Export types (excluding APIOptions to avoid conflict)
 export type {
   RequestError,
@@ -51,6 +54,15 @@ export type {
   TraceMeta,
   TraceNode,
   TracesResponse,
+  // Accounts types
+  AccountStateFull,
+  AccountStatesResponse,
+  WalletState,
+  WalletStatesResponse,
+  GetAccountStatesParams,
+  GetAddressBookParams,
+  GetMetadataParams,
+  GetWalletStatesParams,
 } from "./src/types";
 
 // Export constants
@@ -58,7 +70,7 @@ export * from "./src/const";
 
 // Example usage (commented out for library usage)
 /*
-import { getTransactions, getMasterchainInfo, getActions, getTraces } from './src';
+import { getTransactions, getMasterchainInfo, getActions, getTraces, getAccountStates } from './src';
 
 async function example() {
   try {
@@ -86,6 +98,13 @@ async function example() {
       { apiKey: 'YOUR_API_KEY' }
     );
     console.log('Traces:', traces);
+
+    // Get account states
+    const accountStates = await getAccountStates(
+      { address: ['EQD6NM...', 'EQBx...'] },
+      { apiKey: 'YOUR_API_KEY' }
+    );
+    console.log('Account states:', accountStates);
 
   } catch (error) {
     console.error('API Error:', error);
