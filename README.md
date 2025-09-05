@@ -58,10 +58,7 @@ async function example() {
     const transactions = await getTransactions({ limit: 10 }, { apiKey });
 
     // Get Jetton transfers
-    const jettonTransfers = await getJettonTransfers(
-      { limit: 10 },
-      { apiKey }
-    );
+    const jettonTransfers = await getJettonTransfers({ limit: 10 }, { apiKey });
 
     // Get NFT collections
     const nftCollections = await getNFTCollections({ limit: 10 }, { apiKey });
@@ -127,7 +124,7 @@ Jetton tokens ecosystem support.
 - `getJettonTransfers()` - Get Jetton token transfers
 - `getJettonWallets()` - Get Jetton wallets by criteria
 
-### 🎨 NFTs API  
+### 🎨 NFTs API
 
 Non-fungible tokens and marketplace data.
 
