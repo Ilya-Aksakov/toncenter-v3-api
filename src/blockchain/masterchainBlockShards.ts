@@ -1,6 +1,6 @@
 import type {
   GetMasterchainBlockShardsParams,
-  TransactionsResponse,
+  BlocksResponse,
   RequestError,
   APIOptions,
 } from "../types";
@@ -12,7 +12,7 @@ import { BASE_URLS, DEFAULT_CHAIN } from "../const";
 export async function getMasterchainBlockShards(
   params: GetMasterchainBlockShardsParams,
   options: APIOptions = {}
-): Promise<TransactionsResponse> {
+): Promise<BlocksResponse> {
   const { apiKey, chain = DEFAULT_CHAIN } = options;
   const url = new URL(`${BASE_URLS[chain]}/masterchainBlockShards`);
 
